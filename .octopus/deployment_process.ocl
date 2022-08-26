@@ -4,6 +4,22 @@ step "deploy-a-package" {
         Octopus.Action.TargetRoles = "trident-web"
     }
 
+    action "adding-to-load-balancer" {
+        action_type = "Octopus.Script"
+        name = "Adding to Load Balancer"
+        properties = {
+            Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $machineName = $OctopusParameters["Octopus.Machine.Name"]
+                  
+                Write-Host "Adding $machineName back to the Load Balancer."
+            EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool_variable = ""
+    }
+
     action "deploy-a-package" {
         action_type = "Octopus.TentaclePackage"
         name = "Deploy a Package"
@@ -24,22 +40,6 @@ step "deploy-a-package" {
                 SelectionMode = "immediate"
             }
         }
-    }
-
-    action "adding-to-load-balancer" {
-        action_type = "Octopus.Script"
-        name = "Adding to Load Balancer"
-        properties = {
-            Octopus.Action.RunOnServer = "false"
-            Octopus.Action.Script.ScriptBody = <<-EOT
-                $machineName = $OctopusParameters["Octopus.Machine.Name"]
-                  
-                Write-Host "Adding $machineName back to the Load Balancer."
-            EOT
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
-        }
-        worker_pool_variable = ""
     }
 
     action "removing-from-load-balancer" {
