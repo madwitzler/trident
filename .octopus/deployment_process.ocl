@@ -1,25 +1,23 @@
 step "deploy-a-package" {
     name = "Deploy Trident Website"
     properties = {
-        Octopus.Action.MaxParallelism = "2"
         Octopus.Action.TargetRoles = "trident-web"
     }
 
-    action "remove-from-load-balancer" {
+    action "adding-to-load-balancer" {
         action_type = "Octopus.Script"
-        environments = ["staging", "production"]
-        name = "Remove from Load Balancer"
+        name = "Adding to Load Balancer"
         properties = {
-            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.RunOnServer = "false"
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $machineName = $OctopusParameters["Octopus.Machine.Name"]
                   
-                Write-Host "Remove $machineName from the Load Balancer."
+                Write-Host "Adding $machineName back to the Load Balancer."
             EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
-        worker_pool = "hosted-ubuntu"
+        worker_pool_variable = ""
     }
 
     action "deploy-a-package" {
@@ -44,21 +42,20 @@ step "deploy-a-package" {
         }
     }
 
-    action "remove-from-load-balancer" {
+    action "removing-from-load-balancer" {
         action_type = "Octopus.Script"
-        environments = ["staging", "production"]
-        name = "Add to Load Balancer"
+        name = "Removing from Load Balancer"
         properties = {
-            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.RunOnServer = "false"
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $machineName = $OctopusParameters["Octopus.Machine.Name"]
                   
-                Write-Host "Adding $machineName back to the Load Balancer."
+                Write-Host "Removing $machineName from the Load Balancer."
             EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
-        worker_pool = "hosted-ubuntu"
+        worker_pool_variable = ""
     }
 }
 
