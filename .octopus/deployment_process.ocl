@@ -1,6 +1,7 @@
 step "deploy-a-package" {
     name = "Deploy Trident Website"
     properties = {
+        Octopus.Action.MaxParallelism = "1"
         Octopus.Action.TargetRoles = "trident-web"
     }
 
@@ -13,6 +14,9 @@ step "deploy-a-package" {
                 $machineName = $OctopusParameters["Octopus.Machine.Name"]
                   
                 Write-Host "Adding $machineName back to the Load Balancer."
+                
+                Write-Host "forcing an error because reasons"
+                Exit 1
             EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
