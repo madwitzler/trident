@@ -80,11 +80,8 @@ step "auto-approve-database-delta-script" {
 }
 
 step "approve-database-delta-script" {
-    condition = "Variable"
+    condition = "Always"
     name = "Approve Database Delta Script"
-    properties = {
-        Octopus.Step.ConditionVariableExpression = "#{if Octopus.Deployment.Error == \"\"}#{Project.Database.ApprovalRequired}#{/if}"
-    }
 
     action {
         action_type = "Octopus.Manual"
