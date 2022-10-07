@@ -67,6 +67,7 @@ step "generate-database-delta-report" {
 }
 
 step "approve-database-delta-script" {
+    condition = "Always"
     name = "Approve Database Delta Script"
 
     action {
