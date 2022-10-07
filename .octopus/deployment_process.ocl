@@ -73,7 +73,7 @@ step "auto-approve-database-delta-script" {
             Databases.AutoApprove.ReportPath = "#{Project.Database.Report.Path}\\UpgradeReport.html"
             Octopus.Action.RunOnServer = "true"
             Octopus.Action.Template.Id = "ActionTemplates-41"
-            Octopus.Action.Template.Version = "3"
+            Octopus.Action.Template.Version = "4"
         }
         worker_pool = "default-worker-pool"
     }
