@@ -217,3 +217,22 @@ step "slack-send-simple-notification" {
         worker_pool = "default-worker-pool"
     }
 }
+
+step "auto-approve-database-delta-script" {
+    name = "Auto approve database delta script"
+    properties = {
+        Octopus.Action.TargetRoles = "trident-web"
+    }
+
+    action {
+        properties = {
+            Databases.AutoApprove.CommandsIndicatingChange = "﻿#{SQL.Verification.Change.List}"
+            Databases.AutoApprove.CommandsRequireApproval = "﻿#{SQL.Verification.Command.List}"
+            Databases.AutoApprove.DatabaseDeltaReportPath = "#{Project.Database.Report.Path}\\UpgradeReport.html"
+            Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Template.Id = "ActionTemplates-41"
+            Octopus.Action.Template.Version = "2"
+        }
+        worker_pool_variable = ""
+    }
+}
