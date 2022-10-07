@@ -29,11 +29,14 @@ step "run-octopus-deploy-runbook" {
 
 step "generate-database-delta-report" {
     name = "Generate Database Delta Report"
+    properties = {
+        Octopus.Action.TargetRoles = "trident-web"
+    }
 
     action {
         action_type = "Octopus.Script"
         properties = {
-            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.RunOnServer = "false"
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $packagePath = $OctopusParameters["Octopus.Action.Package[Trident.Database].ExtractedPath"]
                 $connectionString = $OctopusParameters["Project.Connection.String"]
@@ -80,7 +83,6 @@ step "generate-database-delta-report" {
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
-        worker_pool = "default-worker-pool"
 
         packages "Trident.Database" {
             acquisition_location = "Server"
