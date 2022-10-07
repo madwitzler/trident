@@ -68,12 +68,12 @@ step "auto-approve-database-delta-script" {
 
     action {
         properties = {
+            Databases.AutoApproval.ReportPath = "#{Octopus.Action[Auto-Approve Database Delta Script].Output.ApprovalRequired}"
             Databases.AutoApprove.CommandsIndicatingChange = "﻿#{SQL.Verification.Change.List}"
             Databases.AutoApprove.CommandsRequireApproval = "﻿#{SQL.Verification.Command.List}"
-            Databases.AutoApprove.ReportPath = "#{Project.Database.Report.Path}\\UpgradeReport.html"
             Octopus.Action.RunOnServer = "true"
             Octopus.Action.Template.Id = "ActionTemplates-41"
-            Octopus.Action.Template.Version = "4"
+            Octopus.Action.Template.Version = "5"
         }
         worker_pool = "default-worker-pool"
     }
