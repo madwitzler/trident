@@ -12,9 +12,11 @@ step "calculate-deployment-mode" {
 }
 
 step "run-octopus-deploy-runbook" {
+    condition = "Variable"
     name = "Run Create Trident Database"
     properties = {
         Octopus.Action.TargetRoles = "trident-web"
+        Octopus.Step.ConditionVariableExpression = "#{unless Octopus.Deployment.Error}#{Octopus.Action[Calculate Deployment Mode].Output.RunOnDeploy}#{/unless}"
     }
 
     action {
