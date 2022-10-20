@@ -203,3 +203,17 @@ step "disable-maintenance-mode" {
         worker_pool = "default-worker-pool"
     }
 }
+
+step "verify-the-application" {
+    name = "Verify the Application"
+
+    action {
+        action_type = "Octopus.Manual"
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "True"
+            Octopus.Action.Manual.Instructions = "Verify the application please."
+            Octopus.Action.Manual.ResponsibleTeamIds = "qa,global/octopus-managers"
+        }
+        worker_pool_variable = ""
+    }
+}
