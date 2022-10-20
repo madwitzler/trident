@@ -101,7 +101,11 @@ step "approve-database-delta-script" {
 }
 
 step "deploy-the-database-changes" {
+    condition = "Variable"
     name = "Deploy the Database Changes"
+    properties = {
+        Octopus.Step.ConditionVariableExpression = "#{unless Octopus.Deployment.Error}#{Octopus.Action[Calculate Deployment Mode].Output.RunOnDeploy}#{/unless}"
+    }
 
     action {
         action_type = "Octopus.Script"
