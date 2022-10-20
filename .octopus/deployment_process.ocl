@@ -194,6 +194,7 @@ step "verify-the-application" {
 
     action {
         action_type = "Octopus.Manual"
+        channels = ["release"]
         properties = {
             Octopus.Action.Manual.BlockConcurrentDeployments = "True"
             Octopus.Action.Manual.Instructions = "Verify the application please."
