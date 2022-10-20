@@ -100,6 +100,21 @@ step "approve-database-delta-script" {
     }
 }
 
+step "enable-maintenance-mode" {
+    name = "Enable Maintenance Mode"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = "Write-Host \"Enable Maintenance Mode\""
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "default-worker-pool"
+    }
+}
+
 step "deploy-the-database-changes" {
     condition = "Variable"
     name = "Deploy the Database Changes"
@@ -174,18 +189,17 @@ step "slack-send-simple-notification" {
     }
 }
 
-step "enable-maintenance-mode" {
-    name = "Enable Maintenance Mode"
+step "verify-the-application" {
+    name = "Verify the Application"
 
     action {
-        action_type = "Octopus.Script"
+        action_type = "Octopus.Manual"
         properties = {
-            Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = "Write-Host \"Enable Maintenance Mode\""
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
+            Octopus.Action.Manual.BlockConcurrentDeployments = "True"
+            Octopus.Action.Manual.Instructions = "Verify the application please."
+            Octopus.Action.Manual.ResponsibleTeamIds = "qa,global/octopus-managers"
         }
-        worker_pool = "default-worker-pool"
+        worker_pool_variable = ""
     }
 }
 
@@ -201,19 +215,5 @@ step "disable-maintenance-mode" {
             Octopus.Action.Script.Syntax = "PowerShell"
         }
         worker_pool = "default-worker-pool"
-    }
-}
-
-step "verify-the-application" {
-    name = "Verify the Application"
-
-    action {
-        action_type = "Octopus.Manual"
-        properties = {
-            Octopus.Action.Manual.BlockConcurrentDeployments = "True"
-            Octopus.Action.Manual.Instructions = "Verify the application please."
-            Octopus.Action.Manual.ResponsibleTeamIds = "qa,global/octopus-managers"
-        }
-        worker_pool_variable = ""
     }
 }
