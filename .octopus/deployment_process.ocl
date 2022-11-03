@@ -175,21 +175,6 @@ step "slack-send-simple-notification" {
     }
 }
 
-step "verify-the-application" {
-    name = "Verify the Application"
-
-    action {
-        action_type = "Octopus.Manual"
-        channels = ["release"]
-        properties = {
-            Octopus.Action.Manual.BlockConcurrentDeployments = "True"
-            Octopus.Action.Manual.Instructions = "Verify the application please."
-            Octopus.Action.Manual.ResponsibleTeamIds = "qa,global/octopus-managers"
-        }
-        worker_pool_variable = ""
-    }
-}
-
 step "disable-maintenance-mode" {
     name = "Disable Maintenance Mode"
 
@@ -198,6 +183,30 @@ step "disable-maintenance-mode" {
         properties = {
             Octopus.Action.RunOnServer = "true"
             Octopus.Action.Script.ScriptBody = "Write-Host \"Disable Maintenance Mode\""
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "default-worker-pool"
+    }
+}
+
+step "verify-code-with-script" {
+    name = "Verify Code with Script"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $randomNumber = Get-Random -Minimum 1 -Maximum 100
+                
+                Write-Host "The random number is $randomNumber.  If it is above 90, this will fail the step."
+                if ($randomNumber -ge 90)
+                {
+                	Write-Host "An error occurred verifying the application."
+                    exit 1
+                }
+            EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
