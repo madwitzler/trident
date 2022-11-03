@@ -91,27 +91,13 @@ step "approve-database-delta-script" {
 
     action {
         action_type = "Octopus.Manual"
+        environments = ["staging", "staging-blue", "staging-green"]
         properties = {
             Octopus.Action.Manual.BlockConcurrentDeployments = "True"
             Octopus.Action.Manual.Instructions = "Please approve the database delta script found in the artifacts section."
             Octopus.Action.Manual.ResponsibleTeamIds = "dba,global/octopus-managers"
         }
         worker_pool_variable = ""
-    }
-}
-
-step "enable-maintenance-mode" {
-    name = "Enable Maintenance Mode"
-
-    action {
-        action_type = "Octopus.Script"
-        properties = {
-            Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = "Write-Host \"Enable Maintenance Mode\""
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
-        }
-        worker_pool = "default-worker-pool"
     }
 }
 
