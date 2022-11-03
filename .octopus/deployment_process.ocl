@@ -176,13 +176,16 @@ step "slack-send-simple-notification" {
 }
 
 step "disable-maintenance-mode" {
-    name = "Disable Maintenance Mode"
+    name = "Update Load Balancer to Blue or Green"
 
     action {
         action_type = "Octopus.Script"
         properties = {
             Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = "Write-Host \"Disable Maintenance Mode\""
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $currentEnvironment = $OctopusParameters["Octopus.Environment.Name"]
+                Write-Highlight "Updating load balancer to point to $currentEnvironment"
+            EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
