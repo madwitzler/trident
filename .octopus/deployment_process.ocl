@@ -200,7 +200,7 @@ step "verify-code-with-script" {
 }
 
 step "canary-deployments" {
-    name = "Canary Deployments"
+    name = "Schedule"
 
     action {
         properties = {
