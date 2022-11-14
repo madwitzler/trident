@@ -117,7 +117,6 @@ jobs:
         with:
           api_key: ${{ env.OCTOPUS_API_KEY }}
           server: ${{ env.OCTOPUS_HOST }}
-          space: ${{ env.OCTOPUS_SPACE }}
           packages: "artifacts/Trident.Database.${{ needs.get-release-information.outputs.VERSION }}.zip,artifacts/Trident.Web.${{ needs.get-release-information.outputs.VERSION }}.zip"
 
       - name: push build information to Octopus
@@ -133,7 +132,6 @@ jobs:
         with:
           api_key: ${{ env.OCTOPUS_API_KEY }}
           server: ${{ env.OCTOPUS_HOST }}
-          space: ${{ env.OCTOPUS_SPACE }}
           project: ${{ env.OCTOPUS_PROJECT_NAME }}
           channel: ${{ needs.get-release-information.outputs.OCTOPUS_CHANNEL }}
           deploy_to: ${{ needs.get-release-information.outputs.OCTOPUS_ENVIRONMENT }}
